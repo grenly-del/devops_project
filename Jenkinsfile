@@ -107,32 +107,5 @@ pipeline {
         }
     }
 
-     post {
-        success {
-            echo "✅ Pipeline selesai sukses!"
-            emailext(
-                subject: "✅ Build Sukses: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                <h2>Build Berhasil 🎉</h2>
-                <p>Project: ${env.JOB_NAME}</p>
-                <p>Build number: ${env.BUILD_NUMBER}</p>
-                <p>Lihat detail: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-                """,
-                to: "snakeeys070@gmail.com"
-            )
-        }
-        failure {
-            echo "❌ Pipeline gagal, cek log untuk detail!"
-            emailext(
-                subject: "❌ Build Gagal: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                <h2>Build Gagal 💥</h2>
-                <p>Project: ${env.JOB_NAME}</p>
-                <p>Build number: ${env.BUILD_NUMBER}</p>
-                <p>Cek log di: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-                """,
-                to: "snakeeys070@gmail.com"
-            )
-        }
-    }
+     
 }
