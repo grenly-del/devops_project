@@ -7,6 +7,9 @@ pipeline {
         FE_SERVICE_1 = "FE_SERVICE_1"
         FE_SERVICE_2 = "FE_SERVICE_2"
         FE_SERVICE_3 = "FE_SERVICE_3"
+        // 🔑 INI YANG PALING PENTING!
+        BUILD_ID = 'dontKillMe'  // ←←←←←←←←←←←←←←←←←←←
+        HOME = '/var/lib/jenkins'  // pastikan PM2 punya $HOME yang benar
     }
 
     stages {
@@ -23,6 +26,8 @@ pipeline {
                 sh '''
                     echo ">> Whoami:"
                     whoami
+                    echo ">> HOME:"
+                    echo $HOME
                     echo ">> PATH:"
                     echo $PATH
                     echo ">> Node version:"
@@ -63,8 +68,6 @@ pipeline {
             }
         }
 
-        
-
         stage("Clean Unused Files") {
             when {
                 expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
@@ -88,24 +91,15 @@ pipeline {
             }
             steps {
                 sh """
-                    pm2 describe ${FE_SERVICE_1} > /dev/null \
-                    && pm2 restart ${FE_SERVICE_1} \
-                    || pm2 start "npx next start --port 3001" --name ${FE_SERVICE_1}
-
-                    pm2 describe ${FE_SERVICE_2} > /dev/null \
-                    && pm2 restart ${FE_SERVICE_2} \
-                    || pm2 start "npx next start --port 3005" --name ${FE_SERVICE_2}
-
-                    pm2 describe ${FE_SERVICE_3} > /dev/null \
-                    && pm2 restart ${FE_SERVICE_3} \
-                    || pm2 start "npx next start --port 3007" --name ${FE_SERVICE_3}
-
+                    cd ${APP_HOME}
+                    # Gunakan full path jika perlu, atau pastikan npx di PATH
+                    pm2 describe ${FE_SERVICE_1} > /dev/null 2>&1 && pm2 restart ${FE_SERVICE_1} || pm2 start "npx next start --port 3001" --name ${FE_SERVICE_1}
+                    pm2 describe ${FE_SERVICE_2} > /dev/null 2>&1 && pm2 restart ${FE_SERVICE_2} || pm2 start "npx next start --port 3005" --name ${FE_SERVICE_2}
+                    pm2 describe ${FE_SERVICE_3} > /dev/null 2>&1 && pm2 restart ${FE_SERVICE_3} || pm2 start "npx next start --port 3007" --name ${FE_SERVICE_3}
                     pm2 save
                     pm2 status
                 """
             }
         }
     }
-
-     
 }
