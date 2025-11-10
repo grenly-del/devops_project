@@ -9,7 +9,7 @@ export default function Home() {
                 <h1 className="text-2xl font-bold text-center mb-6">Silahkan Login!</h1>
                 <LoginForm />
                 <p className="text-sm text-gray-500 text-center mt-4">
-                    Belum punya akun? <a href="#" className="text-blue-500 hover:underline">Daftar di sini</a>
+                    Belum punya akun? <a href="/regis" className="text-blue-500 hover:underline">Daftar di sini</a>
                 </p>
             </main>
         </section>
