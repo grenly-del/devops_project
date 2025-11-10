@@ -6,8 +6,8 @@ export async function POST(req) {
     const { username, password } = await req.json();
 
     const [result] = await db.execute(
-      "INSERT INTO users (username, password, peran) VALUES (?, ?)",
-      [username, password] // langsung disimpan tanpa hashing
+      "INSERT INTO users (username, password, peran) VALUES (?, ?, ?)",
+      [username, password, 'member'] // langsung disimpan tanpa hashing
     );
 
     return NextResponse.json({ message: "Register berhasil", userId: result.insertId });

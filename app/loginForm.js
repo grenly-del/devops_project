@@ -12,7 +12,15 @@ export default function LoginForm () {
 
         .then(res => res.json())
         .then(data => {
-            alert(data.message)
+            
+            if(data.status == 200) {
+                alert(`${data.message}`)
+                document.cookie = `token=${data.token}; path=/;`;
+            }else {
+                alert(`${data.message}`)
+                
+            }
+
         })
         .catch(err => {
             alert(err.message)

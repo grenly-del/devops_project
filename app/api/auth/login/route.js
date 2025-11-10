@@ -1,6 +1,9 @@
 
 import { NextResponse } from "next/server"
 import { db } from "../../../../lib/db";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = 'secret_key_aman'
 
 export async function POST(req) {
   try {
@@ -15,7 +18,27 @@ export async function POST(req) {
     console.log(user);
 
 
-    const response = NextResponse.json({ message: "Login berhasil" });
+     // 🔐 Buat token JWT (misalnya berlaku 1 jam)
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username: user.username,
+        peran: user.peran
+      },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // 🧾 Kirim token ke frontend
+    return NextResponse.json({
+      message: "Login berhasil",
+      token, // frontend bisa simpan di localStorage atau cookie
+      user: {
+        id: user.id,
+        username: user.username,
+      },
+      status: 200
+    });
 
     return response;
   } catch (error) {
